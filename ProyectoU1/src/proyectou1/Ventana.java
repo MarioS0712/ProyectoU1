@@ -18,7 +18,7 @@ public class Ventana extends JFrame {
     private JRadioButton rbPerro, rbGato, rbAve;
     private JCheckBox cbBaño, cbCorte, cbVacunas, cbShampoo, cbUñas, cbCollar;
     private JLabel Mascota, Tipo, Servicio, Extras, mascotaImg;
-    private String mascotasImg[] = {"care.png","dog.png","cat.png","bird.png"};
+    private String mascotasImg[] = {"care.png", "dog.png", "cat.png", "bird.png"};
     private Icon icons[] = {
         new ImageIcon(getClass().getResource(mascotasImg[0])),
         new ImageIcon(getClass().getResource(mascotasImg[1])),
@@ -29,6 +29,8 @@ public class Ventana extends JFrame {
     String registro = "";
     String opcionRadio = "";
     String opcionCBox = "";
+    JTable servicios = new JTable();
+
     DefaultTableModel modelo = new DefaultTableModel();
     private Object[] o = new Object[4];
 
@@ -97,7 +99,7 @@ public class Ventana extends JFrame {
 
     private void initOeste() {
         panelOeste = new JPanel(new GridLayout(10, 1));
-         panelOeste.setBackground(Color.ORANGE);
+        panelOeste.setBackground(Color.ORANGE);
         panelOeste.setBorder(BorderFactory.createTitledBorder("Servicio para Mascota y PetShop"));
         panelOeste.setPreferredSize(new Dimension(220, 50));
         JPanel panelMas1 = new JPanel(new GridLayout(2, 1, 20, 20));
@@ -108,7 +110,7 @@ public class Ventana extends JFrame {
         panelMas1.add(new JLabel("Nombre:", SwingConstants.CENTER));
         panelMas1.setBorder(BorderFactory.createTitledBorder(""));
         txtNombre = new JTextField(5);
-        
+
         panelMas1.add(txtNombre);
         panelOeste.add(panelMas1, BorderLayout.CENTER);
 
@@ -162,7 +164,7 @@ public class Ventana extends JFrame {
     private void initCentro() {
         panelCentro = new JPanel(new GridLayout(5, 1));
         panelCentro.setBackground(Color.ORANGE);
-        panelCentro.setBorder(BorderFactory.createTitledBorder("Resumen del Servicio"));
+        panelCentro.setBorder(BorderFactory.createTitledBorder("Servicio Actual"));
 
         Mascota = new JLabel("Mascota: ");
         Tipo = new JLabel("Tipo: ");
@@ -190,9 +192,8 @@ public class Ventana extends JFrame {
     private void initEste() {
         panelEste = new JPanel(new BorderLayout());
         panelEste.setBackground(Color.ORANGE);
-        panelEste.setBorder(BorderFactory.createTitledBorder("Lista de Servicios"));
+        panelEste.setBorder(BorderFactory.createTitledBorder("Lista de Servicios en espera"));
         panelEste.setPreferredSize(new Dimension(300, 0));
-        JTable servicios = new JTable();
 
         modelo.addColumn("Nombre");
         modelo.addColumn("Animal");
@@ -213,11 +214,14 @@ public class Ventana extends JFrame {
         panelSur.setBorder(BorderFactory.createTitledBorder("Opciones"));
 
         JButton btnGuardar = new JButton("Guardar");
-        JButton btnAñadir = new JButton("Añadir");
+        JButton btnAñadir = new JButton("Añadir Mascota");
         JButton btnSalir = new JButton("Salir");
+        JButton btnAtender = new JButton("Atender Mascota");
+        JButton btnFinSer = new JButton("Finalizar servicio");
 
-        panelSur.add(btnGuardar);
         panelSur.add(btnAñadir);
+        panelSur.add(btnAtender);
+        panelSur.add(btnFinSer);
         panelSur.add(btnSalir);
 
         btnGuardar.addActionListener(new ActionListener() {
@@ -294,21 +298,20 @@ public class Ventana extends JFrame {
                 if (cbVacunas.isSelected()) {
                     o[2] = "Vacunas ";
                 }
-                if(cbBaño.isSelected()& cbCorte.isSelected()){
+                if (cbBaño.isSelected() & cbCorte.isSelected()) {
                     o[2] = "Baño, Corte";
                 }
-                
-                if(cbBaño.isSelected()& cbVacunas.isSelected()){
+
+                if (cbBaño.isSelected() & cbVacunas.isSelected()) {
                     o[2] = "Baño, Vacunas";
                 }
-                
-                if(cbCorte.isSelected()& cbVacunas.isSelected()){
+
+                if (cbCorte.isSelected() & cbVacunas.isSelected()) {
                     o[2] = "Corte, Vacunas";
                 }
-                if(cbBaño.isSelected()& cbCorte.isSelected()&cbVacunas.isSelected()){
+                if (cbBaño.isSelected() & cbCorte.isSelected() & cbVacunas.isSelected()) {
                     o[2] = "Baño, Corte, Vacunas";
                 }
-               
 
                 if (cbShampoo.isSelected()) {
                     o[3] = "Shampoo ";
@@ -319,20 +322,20 @@ public class Ventana extends JFrame {
                 }
 
                 if (cbCollar.isSelected()) {
-                    o[3] ="Collar Antipulgas ";
+                    o[3] = "Collar Antipulgas ";
                 }
-                if(cbShampoo.isSelected()& cbUñas.isSelected()){
+                if (cbShampoo.isSelected() & cbUñas.isSelected()) {
                     o[3] = "Shampoo, Uñas";
                 }
-                
-                if(cbShampoo.isSelected()& cbCollar.isSelected()){
+
+                if (cbShampoo.isSelected() & cbCollar.isSelected()) {
                     o[3] = "Shampoo, Collar";
                 }
-                
-                if(cbUñas.isSelected()& cbCollar.isSelected()){
+
+                if (cbUñas.isSelected() & cbCollar.isSelected()) {
                     o[3] = "Uñas, Collar";
                 }
-                if(cbShampoo.isSelected()& cbUñas.isSelected()&cbCollar.isSelected()){
+                if (cbShampoo.isSelected() & cbUñas.isSelected() & cbCollar.isSelected()) {
                     o[3] = "Shampoo, Uñas, Collar";
                 }
 
@@ -345,6 +348,58 @@ public class Ventana extends JFrame {
                 System.exit(0);
             }
         });
+
+        btnAtender.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(Tipo.getText().equals("Tipo: ")){
+                int filas = servicios.getRowCount();
+                if (filas > 0) {
+                    int ultima = servicios.getRowCount() - 1;
+
+                    String dato1 = String.valueOf(servicios.getValueAt(ultima, 0));
+                    String dato2 = String.valueOf(servicios.getValueAt(ultima, 1));
+                    String dato3 = String.valueOf(servicios.getValueAt(ultima, 2));
+                    String dato4 = String.valueOf(servicios.getValueAt(ultima, 3));
+                    
+                    
+                    Mascota.setText("Mascota: " + dato1);
+                    Tipo.setText("Tipo: " + dato2);
+                    Servicio.setText("Servicios: " + dato3);
+                    Extras.setText("Extras: " + dato4);
+                    if (dato2.equals("Perro ")) {
+                        mascotaImg.setIcon(icons[1]);
+                    }
+                    if (dato2.equals("Gato ")) {
+                        mascotaImg.setIcon(icons[2]);
+                    }
+                    if (dato2.equals("Ave ")) {
+                        mascotaImg.setIcon(icons[3]);
+                    }
+                    modelo.removeRow(ultima);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No hay ningún animal en espera");
+                }
+            }else{
+                    JOptionPane.showMessageDialog(null, "Ya hay una mascota en servicio");
+                }
+                
+            }
+
+        });
+        
+        btnFinSer.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Mascota.setText("Mascota: " );
+                Tipo.setText("Tipo: ");
+                Servicio.setText("Servicios: ");
+                Extras.setText("Extras: ");
+                mascotaImg.setIcon(icons[0]);
+            }
+        
+        });
         add(panelSur, BorderLayout.SOUTH);
+
     }
 }
