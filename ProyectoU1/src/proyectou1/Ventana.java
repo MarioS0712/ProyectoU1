@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -37,7 +38,9 @@ public class Ventana extends JFrame {
 
     private String datos[] = new String[100];
     private int contador = 0;
-    private Font textosTipo = new Font("Arial", Font.BOLD, 10);
+    private Font txtTitulo = new Font("Segoe UI", Font.BOLD, 14);
+    private Font txtEncabezados = new Font("Segoe UI", Font.BOLD, 16);
+    private Font txtTextos = new Font("Segoe UI", Font.BOLD, 12);
 
     public Ventana() {
         super("Proyecto U1");
@@ -52,10 +55,11 @@ public class Ventana extends JFrame {
 
     private void initNorte() {
         panelNorte = new JPanel(new BorderLayout());
-        panelNorte.setBackground(Color.ORANGE);
-        panelNorte.setBorder(BorderFactory.createTitledBorder("Sistema"));
+        Color fondo = new Color(255, 204, 0);
+        panelNorte.setBackground(fondo);
+        panelNorte.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Sistema", TitledBorder.CENTER, TitledBorder.TOP));
 
-        JLabel titulo = new JLabel("Servicio para Mascotas y PetShop MANAGER");
+        JLabel titulo = Diseño.encabezado("Servicio para Mascotas y PetShop MANAGER");
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         JButton btnPest1 = new JButton("Servicios");
         Dimension dimension = new Dimension(100, 40);
@@ -102,7 +106,7 @@ public class Ventana extends JFrame {
         //Panel Principal
         panelOeste = new JPanel(new GridLayout(4, 1));
         panelOeste.setBackground(Color.ORANGE);
-        panelOeste.setBorder(BorderFactory.createTitledBorder("Registro de Servicio"));
+        panelOeste.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Registro de Servicio", TitledBorder.CENTER, TitledBorder.TOP));
         panelOeste.setPreferredSize(new Dimension(220, 50));
         //SubPaneles
         JPanel panelMas1 = new JPanel(new GridBagLayout());
@@ -111,16 +115,16 @@ public class Ventana extends JFrame {
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelMas1.setBorder(new EmptyBorder(30, 30, 30, 30));
+        panelMas1.setBorder(new EmptyBorder(5,5,5,5));
         JPanel panelMas2 = new JPanel();
         panelMas2.setLayout(new BoxLayout(panelMas2, BoxLayout.Y_AXIS));
-        panelMas2.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelMas2.setBorder(new EmptyBorder(2,2,2,2));
         panelMas2.setBackground(Color.ORANGE);
         JPanel panelMas3 = new JPanel(new GridLayout(4, 1));
-        panelMas3.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelMas3.setBorder(new EmptyBorder(2,2,2,2));
         panelMas3.setBackground(Color.ORANGE);
         JPanel panelMas4 = new JPanel(new GridLayout(4, 1));
-        panelMas4.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelMas4.setBorder(new EmptyBorder(2,2,2,2));
         panelMas4.setBackground(Color.ORANGE);
 
         panelMas1.setBorder(BorderFactory.createTitledBorder(""));
@@ -129,39 +133,63 @@ public class Ventana extends JFrame {
         gbc.gridy = 1;
         panelMas1.add(txtNombre, gbc);
 
-        panelOeste.add(panelMas1);
-
-        panelMas2.add(new JLabel("Tipo de Mascota:", SwingConstants.CENTER), BorderLayout.NORTH);
-        panelMas2.add(Box.createVerticalStrut(13));
+        panelMas2.add(new JLabel("Tipo de Mascota:", SwingConstants.CENTER));
         panelMas2.setBorder(BorderFactory.createTitledBorder(""));
+
         String tiposMascota[] = {"Perro", "Gato", "Ave"};
         JRadioButton rbMascotas[] = new JRadioButton[3];
         ButtonGroup grupo = new ButtonGroup();
 
         for (int i = 0; i < tiposMascota.length; i++) {
             rbMascotas[i] = new JRadioButton(tiposMascota[i] + " $5");
+
+            rbMascotas[i].setBackground(Color.ORANGE);
+            rbMascotas[i].setOpaque(true);
+            rbMascotas[i].setFocusPainted(false);
+            rbMascotas[i].setBorderPainted(false);
+            rbMascotas[i].setMargin(new Insets(0,0,0,0));
+            rbMascotas[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+            rbMascotas[i].setHorizontalAlignment(SwingConstants.LEFT);
+
             grupo.add(rbMascotas[i]);
+            panelMas2.add(Box.createVerticalStrut(10));
             panelMas2.add(rbMascotas[i]);
-            panelMas2.add(Box.createVerticalStrut(5));
         }
+
         rbPerro = rbMascotas[0];
         rbGato = rbMascotas[1];
         rbAve = rbMascotas[2];
         rbPerro.setSelected(true);
+        JRadioButton Masc[] = {rbPerro, rbGato, rbAve};
+        for(int i=0;i<Masc.length;i++){
+            Masc[i].setFont(txtTextos);
+            Masc[i].setHorizontalAlignment(SwingConstants.LEFT);
+            Masc[i].setForeground(Color.BLACK);
+        }
 
-        panelMas3.add(new JLabel("Servicios", SwingConstants.CENTER));
+        panelMas3.add(new JLabel("Servicios", SwingConstants.LEFT));
         panelMas3.setBorder(BorderFactory.createTitledBorder(""));
         String servicios[] = {"Baño", "Corte", "Vacunas"};
         JCheckBox cbServicios[] = new JCheckBox[3];
 
         for (int i = 0; i < servicios.length; i++) {
             cbServicios[i] = new JCheckBox(servicios[i] + " $5");
+            cbServicios[i].setBackground(Color.ORANGE);
+            cbServicios[i].setFocusPainted(false);
             panelMas3.add(cbServicios[i]);
         }
         cbBaño = cbServicios[0];
         cbCorte = cbServicios[1];
         cbVacunas = cbServicios[2];
-        panelMas4.add(new JLabel("Extras", SwingConstants.CENTER), BorderLayout.NORTH);
+        //Tipo de letras
+        JCheckBox Producto[] = {cbBaño, cbCorte,cbVacunas};
+        for(int i=0;i<Producto.length;i++){
+            Producto[i].setFont(txtTextos);
+            Producto[i].setHorizontalAlignment(SwingConstants.LEFT);
+            Producto[i].setForeground(Color.BLACK);
+        }
+
+        panelMas4.add(new JLabel("Extras"), BorderLayout.NORTH);
         panelMas4.setBorder(BorderFactory.createTitledBorder(""));
 
         String extras[] = {"Shampoo Especial", "Corte de Uñas", "Collar Antipulgas"};
@@ -169,11 +197,23 @@ public class Ventana extends JFrame {
 
         for (int i = 0; i < extras.length; i++) {
             cbExtras[i] = new JCheckBox(extras[i] + " $10");
+            cbExtras[i].setBackground(Color.ORANGE);
+            cbExtras[i].setFocusPainted(false);
+            cbExtras[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+            cbExtras[i].setHorizontalAlignment(SwingConstants.LEFT);
             panelMas4.add(cbExtras[i], BorderLayout.SOUTH);
         }
         cbShampoo = cbExtras[0];
         cbUñas = cbExtras[1];
         cbCollar = cbExtras[2];
+        //Tipo de letras
+        JCheckBox etiquetas[] = {cbShampoo, cbUñas,cbCollar};
+        for(int i=0;i<etiquetas.length;i++){
+            etiquetas[i].setFont(txtTextos);
+            etiquetas[i].setHorizontalAlignment(SwingConstants.LEFT);
+            etiquetas[i].setForeground(Color.BLACK);
+        }
+
         panelOeste.add(panelMas1);
         panelOeste.add(panelMas2);
         panelOeste.add(panelMas3);
@@ -184,7 +224,7 @@ public class Ventana extends JFrame {
     private void initCentro() {
         panelCentro = new JPanel(new GridLayout(6, 1));
         panelCentro.setBackground(Color.ORANGE);
-        panelCentro.setBorder(BorderFactory.createTitledBorder("Servicio Actual"));
+        panelCentro.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Servicio Actual", TitledBorder.CENTER, TitledBorder.TOP));
 
         Mascota = new JLabel("Mascota: ");
         Tipo = new JLabel("Tipo: ");
@@ -192,6 +232,14 @@ public class Ventana extends JFrame {
         Extras = new JLabel("Extras: ");
         Costo = new JLabel("Costos: ");
         mascotaImg = new JLabel(icons[0]);
+        //Tipo de letras
+        JLabel etiquetas[] = {Mascota, Tipo, Servicio, Extras, Costo};
+        for(int i=0;i<etiquetas.length;i++){
+            etiquetas[i].setFont(txtTitulo);
+            etiquetas[i].setHorizontalAlignment(SwingConstants.CENTER);
+            etiquetas[i].setForeground(Color.BLACK);
+        }
+
         panelCentro.add(Mascota);
         panelCentro.add(Tipo);
         panelCentro.add(Servicio);
@@ -204,7 +252,7 @@ public class Ventana extends JFrame {
     private void initCentro2() {
         panelCentro2 = new JPanel(new GridLayout(5, 1));
         panelCentro2.setBackground(Color.ORANGE);
-        panelCentro2.setBorder(BorderFactory.createTitledBorder("Funciones Proximas"));
+        panelCentro2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Funciones Proximas", TitledBorder.CENTER, TitledBorder.TOP));
 
         JLabel Mensaje = new JLabel("Pestaña 2 ", SwingConstants.CENTER);
         panelCentro2.add(Mensaje, BorderLayout.CENTER);
@@ -214,7 +262,7 @@ public class Ventana extends JFrame {
     private void initEste() {
         panelEste = new JPanel(new BorderLayout());
         panelEste.setBackground(Color.ORANGE);
-        panelEste.setBorder(BorderFactory.createTitledBorder("Lista de Servicios en espera"));
+        panelEste.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Lista de Servicios en espera", TitledBorder.CENTER, TitledBorder.TOP));
         panelEste.setPreferredSize(new Dimension(300, 0));
 
         modelo.addColumn("Nombre");
@@ -223,6 +271,9 @@ public class Ventana extends JFrame {
         modelo.addColumn("Extras");
         modelo.addColumn("Costo");
         servicios.setModel(modelo);
+        servicios.setRowHeight(25);
+        servicios.getTableHeader().setFont(txtTextos);
+        servicios.setFont(txtTextos);
 
         JScrollPane scrollPane = new JScrollPane(servicios);
         panelEste.add(scrollPane, BorderLayout.CENTER);
@@ -233,13 +284,18 @@ public class Ventana extends JFrame {
     private void initSur() {
         panelSur = new JPanel(new FlowLayout());
         panelSur.setBackground(Color.ORANGE);
-        panelSur.setBorder(BorderFactory.createTitledBorder("Opciones"));
+        panelSur.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Opciones", TitledBorder.CENTER, TitledBorder.TOP));
 
         JButton btnGuardar = new JButton("Guardar");
         JButton btnAñadir = new JButton("Añadir Mascota");
         JButton btnSalir = new JButton("Salir");
         JButton btnAtender = new JButton("Atender Mascota");
         JButton btnFinSer = new JButton("Finalizar servicio");
+
+        btnAñadir.setPreferredSize(new Dimension(150,35));
+        btnAtender.setPreferredSize(new Dimension(150,35));
+        btnFinSer.setPreferredSize(new Dimension(150,35));
+        btnSalir.setPreferredSize(new Dimension(100,35));
 
         panelSur.add(btnAñadir);
         panelSur.add(btnAtender);
@@ -444,6 +500,7 @@ public class Ventana extends JFrame {
                     Tipo.setText("Tipo: ");
                     Servicio.setText("Servicios: ");
                     Extras.setText("Extras: ");
+                    Costo.setText("Costo: ");
                     mascotaImg.setIcon(icons[0]);
                 }
             }
