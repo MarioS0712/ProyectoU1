@@ -3,6 +3,7 @@ package proyectou1;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -17,7 +18,7 @@ public class Ventana extends JFrame {
     private JTextField txtNombre;
     private JRadioButton rbPerro, rbGato, rbAve;
     private JCheckBox cbBaño, cbCorte, cbVacunas, cbShampoo, cbUñas, cbCollar;
-    private JLabel Mascota, Tipo, Servicio, Extras, mascotaImg;
+    private JLabel Mascota, Tipo, Servicio, Extras, Costo, mascotaImg;
     private String mascotasImg[] = {"care.png", "dog.png", "cat.png", "bird.png"};
     private Icon icons[] = {
         new ImageIcon(getClass().getResource(mascotasImg[0])),
@@ -32,7 +33,7 @@ public class Ventana extends JFrame {
     JTable servicios = new JTable();
 
     DefaultTableModel modelo = new DefaultTableModel();
-    private Object[] o = new Object[4];
+    private Object[] o = new Object[5];
 
     private String datos[] = new String[100];
     private int contador = 0;
@@ -54,7 +55,7 @@ public class Ventana extends JFrame {
         panelNorte.setBackground(Color.ORANGE);
         panelNorte.setBorder(BorderFactory.createTitledBorder("Sistema"));
 
-        JLabel titulo = new JLabel("Servicio para Mascotas y PetShop");
+        JLabel titulo = new JLabel("Servicio para Mascotas y PetShop MANAGER");
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         JButton btnPest1 = new JButton("Servicios");
         Dimension dimension = new Dimension(100, 40);
@@ -98,33 +99,50 @@ public class Ventana extends JFrame {
     }
 
     private void initOeste() {
-        panelOeste = new JPanel(new GridLayout(10, 1));
+        //Panel Principal
+        panelOeste = new JPanel(new GridLayout(4, 1));
         panelOeste.setBackground(Color.ORANGE);
-        panelOeste.setBorder(BorderFactory.createTitledBorder("Servicio para Mascota y PetShop"));
+        panelOeste.setBorder(BorderFactory.createTitledBorder("Registro de Servicio"));
         panelOeste.setPreferredSize(new Dimension(220, 50));
-        JPanel panelMas1 = new JPanel(new GridLayout(2, 1, 20, 20));
-        JPanel panelMas2 = new JPanel(new GridLayout(4, 1));
-
+        //SubPaneles
+        JPanel panelMas1 = new JPanel(new GridBagLayout());
+        panelMas1.setBackground(Color.ORANGE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelMas1.setBorder(new EmptyBorder(30, 30, 30, 30));
+        JPanel panelMas2 = new JPanel();
+        panelMas2.setLayout(new BoxLayout(panelMas2, BoxLayout.Y_AXIS));
+        panelMas2.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelMas2.setBackground(Color.ORANGE);
         JPanel panelMas3 = new JPanel(new GridLayout(4, 1));
+        panelMas3.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelMas3.setBackground(Color.ORANGE);
         JPanel panelMas4 = new JPanel(new GridLayout(4, 1));
-        panelMas1.add(new JLabel("Nombre:", SwingConstants.CENTER));
-        panelMas1.setBorder(BorderFactory.createTitledBorder(""));
-        txtNombre = new JTextField(5);
+        panelMas4.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelMas4.setBackground(Color.ORANGE);
 
-        panelMas1.add(txtNombre);
-        panelOeste.add(panelMas1, BorderLayout.CENTER);
+        panelMas1.setBorder(BorderFactory.createTitledBorder(""));
+        panelMas1.add(new JLabel("Nombre:"), gbc);
+        txtNombre = new JTextField(15);
+        gbc.gridy = 1;
+        panelMas1.add(txtNombre, gbc);
+
+        panelOeste.add(panelMas1);
 
         panelMas2.add(new JLabel("Tipo de Mascota:", SwingConstants.CENTER), BorderLayout.NORTH);
+        panelMas2.add(Box.createVerticalStrut(13));
         panelMas2.setBorder(BorderFactory.createTitledBorder(""));
         String tiposMascota[] = {"Perro", "Gato", "Ave"};
         JRadioButton rbMascotas[] = new JRadioButton[3];
         ButtonGroup grupo = new ButtonGroup();
 
         for (int i = 0; i < tiposMascota.length; i++) {
-            rbMascotas[i] = new JRadioButton(tiposMascota[i]);
-            rbMascotas[i].setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
+            rbMascotas[i] = new JRadioButton(tiposMascota[i] + " $5");
             grupo.add(rbMascotas[i]);
             panelMas2.add(rbMascotas[i]);
+            panelMas2.add(Box.createVerticalStrut(5));
         }
         rbPerro = rbMascotas[0];
         rbGato = rbMascotas[1];
@@ -132,23 +150,25 @@ public class Ventana extends JFrame {
         rbPerro.setSelected(true);
 
         panelMas3.add(new JLabel("Servicios", SwingConstants.CENTER));
+        panelMas3.setBorder(BorderFactory.createTitledBorder(""));
         String servicios[] = {"Baño", "Corte", "Vacunas"};
         JCheckBox cbServicios[] = new JCheckBox[3];
 
         for (int i = 0; i < servicios.length; i++) {
-            cbServicios[i] = new JCheckBox(servicios[i]);
+            cbServicios[i] = new JCheckBox(servicios[i] + " $5");
             panelMas3.add(cbServicios[i]);
         }
         cbBaño = cbServicios[0];
         cbCorte = cbServicios[1];
         cbVacunas = cbServicios[2];
         panelMas4.add(new JLabel("Extras", SwingConstants.CENTER), BorderLayout.NORTH);
+        panelMas4.setBorder(BorderFactory.createTitledBorder(""));
 
         String extras[] = {"Shampoo Especial", "Corte de Uñas", "Collar Antipulgas"};
         JCheckBox cbExtras[] = new JCheckBox[3];
 
         for (int i = 0; i < extras.length; i++) {
-            cbExtras[i] = new JCheckBox(extras[i]);
+            cbExtras[i] = new JCheckBox(extras[i] + " $10");
             panelMas4.add(cbExtras[i], BorderLayout.SOUTH);
         }
         cbShampoo = cbExtras[0];
@@ -162,7 +182,7 @@ public class Ventana extends JFrame {
     }
 
     private void initCentro() {
-        panelCentro = new JPanel(new GridLayout(5, 1));
+        panelCentro = new JPanel(new GridLayout(6, 1));
         panelCentro.setBackground(Color.ORANGE);
         panelCentro.setBorder(BorderFactory.createTitledBorder("Servicio Actual"));
 
@@ -170,11 +190,13 @@ public class Ventana extends JFrame {
         Tipo = new JLabel("Tipo: ");
         Servicio = new JLabel("Servicios: ");
         Extras = new JLabel("Extras: ");
+        Costo = new JLabel("Costos: ");
         mascotaImg = new JLabel(icons[0]);
         panelCentro.add(Mascota);
         panelCentro.add(Tipo);
         panelCentro.add(Servicio);
         panelCentro.add(Extras);
+        panelCentro.add(Costo);
         panelCentro.add(mascotaImg);
         add(panelCentro, BorderLayout.CENTER);
     }
@@ -199,7 +221,7 @@ public class Ventana extends JFrame {
         modelo.addColumn("Animal");
         modelo.addColumn("Servicio");
         modelo.addColumn("Extras");
-
+        modelo.addColumn("Costo");
         servicios.setModel(modelo);
 
         JScrollPane scrollPane = new JScrollPane(servicios);
@@ -226,8 +248,15 @@ public class Ventana extends JFrame {
 
         btnGuardar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String nombre = "";
+                if (txtNombre.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese el nombre de la Mascota");
+                    txtNombre.requestFocus();
+                    return;
+                } else {
+                    nombre = txtNombre.getText();
+                }
 
-                String nombre = txtNombre.getText();
                 String tipo = "";
                 if (rbPerro.isSelected()) {
                     tipo = "Perro";
@@ -273,30 +302,43 @@ public class Ventana extends JFrame {
 
         btnAñadir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                o[0] = txtNombre.getText();
+                int precio = 0;
+                if (txtNombre.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese el nombre de la Mascota");
+                    txtNombre.requestFocus();
+                    return;
+                } else {
+                    o[0] = txtNombre.getText();
+                }
 
                 if (rbPerro.isSelected()) {
                     o[1] = "Perro ";
+                    precio += 5;
                 }
 
                 if (rbGato.isSelected()) {
                     o[1] = "Gato ";
+                    precio += 5;
                 }
 
                 if (rbAve.isSelected()) {
-                    o[1] = registro + "Ave ";
+                    o[1] = "Ave ";
+                    precio += 5;
                 }
 
                 if (cbBaño.isSelected()) {
                     o[2] = "Baño ";
+                    precio += 5;
                 }
 
                 if (cbCorte.isSelected()) {
-                    o[2] = registro + "Corte ";
+                    o[2] = "Corte ";
+                    precio += 5;
                 }
 
                 if (cbVacunas.isSelected()) {
                     o[2] = "Vacunas ";
+                    precio += 5;
                 }
                 if (cbBaño.isSelected() & cbCorte.isSelected()) {
                     o[2] = "Baño, Corte";
@@ -315,14 +357,17 @@ public class Ventana extends JFrame {
 
                 if (cbShampoo.isSelected()) {
                     o[3] = "Shampoo ";
+                    precio += 10;
                 }
 
                 if (cbUñas.isSelected()) {
                     o[3] = "Corte de Uñas ";
+                    precio += 10;
                 }
 
                 if (cbCollar.isSelected()) {
                     o[3] = "Collar Antipulgas ";
+                    precio += 10;
                 }
                 if (cbShampoo.isSelected() & cbUñas.isSelected()) {
                     o[3] = "Shampoo, Uñas";
@@ -338,7 +383,8 @@ public class Ventana extends JFrame {
                 if (cbShampoo.isSelected() & cbUñas.isSelected() & cbCollar.isSelected()) {
                     o[3] = "Shampoo, Uñas, Collar";
                 }
-
+                o[4] = Integer.toString(precio);
+                precio = 0;
                 modelo.addRow(o);
                 txtNombre.setText("");
             }
@@ -352,52 +398,56 @@ public class Ventana extends JFrame {
         btnAtender.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Tipo.getText().equals("Tipo: ")){
-                int filas = servicios.getRowCount();
-                if (filas > 0) {
-                    int ultima = servicios.getRowCount() - 1;
+                if (Tipo.getText().equals("Tipo: ")) {
+                    int filas = servicios.getRowCount();
+                    if (filas > 0) {
 
-                    String dato1 = String.valueOf(servicios.getValueAt(ultima, 0));
-                    String dato2 = String.valueOf(servicios.getValueAt(ultima, 1));
-                    String dato3 = String.valueOf(servicios.getValueAt(ultima, 2));
-                    String dato4 = String.valueOf(servicios.getValueAt(ultima, 3));
-                    
-                    
-                    Mascota.setText("Mascota: " + dato1);
-                    Tipo.setText("Tipo: " + dato2);
-                    Servicio.setText("Servicios: " + dato3);
-                    Extras.setText("Extras: " + dato4);
-                    if (dato2.equals("Perro ")) {
-                        mascotaImg.setIcon(icons[1]);
+                        String dato1 = String.valueOf(servicios.getValueAt(0, 0));
+                        String dato2 = String.valueOf(servicios.getValueAt(0, 1));
+                        String dato3 = String.valueOf(servicios.getValueAt(0, 2));
+                        String dato4 = String.valueOf(servicios.getValueAt(0, 3));
+                        String dato5 = String.valueOf(servicios.getValueAt(0, 4));
+
+                        Mascota.setText("Mascota: " + dato1);
+                        Tipo.setText("Tipo: " + dato2);
+                        Servicio.setText("Servicios: " + dato3);
+                        Extras.setText("Extras: " + dato4);
+                        Costo.setText("Precio: $" + dato5);
+                        if (dato2.equals("Perro ")) {
+                            mascotaImg.setIcon(icons[1]);
+                        }
+                        if (dato2.equals("Gato ")) {
+                            mascotaImg.setIcon(icons[2]);
+                        }
+                        if (dato2.equals("Ave ")) {
+                            mascotaImg.setIcon(icons[3]);
+                        }
+                        modelo.removeRow(0);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hay ningún animal en espera");
                     }
-                    if (dato2.equals("Gato ")) {
-                        mascotaImg.setIcon(icons[2]);
-                    }
-                    if (dato2.equals("Ave ")) {
-                        mascotaImg.setIcon(icons[3]);
-                    }
-                    modelo.removeRow(ultima);
                 } else {
-                    JOptionPane.showMessageDialog(null, "No hay ningún animal en espera");
-                }
-            }else{
                     JOptionPane.showMessageDialog(null, "Ya hay una mascota en servicio");
                 }
-                
+
             }
 
         });
-        
-        btnFinSer.addActionListener(new ActionListener(){
+
+        btnFinSer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Mascota.setText("Mascota: " );
-                Tipo.setText("Tipo: ");
-                Servicio.setText("Servicios: ");
-                Extras.setText("Extras: ");
-                mascotaImg.setIcon(icons[0]);
+                if (Tipo.getText().equals("Tipo: ")) {
+                    JOptionPane.showMessageDialog(null, "No hay mascotas en el servicio");
+                } else {
+                    Mascota.setText("Mascota: ");
+                    Tipo.setText("Tipo: ");
+                    Servicio.setText("Servicios: ");
+                    Extras.setText("Extras: ");
+                    mascotaImg.setIcon(icons[0]);
+                }
             }
-        
+
         });
         add(panelSur, BorderLayout.SOUTH);
 
