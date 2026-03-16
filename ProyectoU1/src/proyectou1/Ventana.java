@@ -133,7 +133,7 @@ public class Ventana extends JFrame {
         gbc.gridy = 1;
         panelMas1.add(txtNombre, gbc);
 
-        panelMas2.add(new JLabel("Tipo de Mascota:", SwingConstants.CENTER));
+        panelMas2.add(new JLabel("Tipo de Mascota", SwingConstants.CENTER));
         panelMas2.setBorder(BorderFactory.createTitledBorder(""));
 
         String tiposMascota[] = {"Perro", "Gato", "Ave"};
@@ -152,7 +152,7 @@ public class Ventana extends JFrame {
             rbMascotas[i].setHorizontalAlignment(SwingConstants.LEFT);
 
             grupo.add(rbMascotas[i]);
-            panelMas2.add(Box.createVerticalStrut(10));
+            panelMas2.add(Box.createVerticalStrut(12));
             panelMas2.add(rbMascotas[i]);
         }
 
@@ -161,13 +161,14 @@ public class Ventana extends JFrame {
         rbAve = rbMascotas[2];
         rbPerro.setSelected(true);
         JRadioButton Masc[] = {rbPerro, rbGato, rbAve};
+        //Tipo de letra
         for(int i=0;i<Masc.length;i++){
             Masc[i].setFont(txtTextos);
             Masc[i].setHorizontalAlignment(SwingConstants.LEFT);
             Masc[i].setForeground(Color.BLACK);
         }
 
-        panelMas3.add(new JLabel("Servicios", SwingConstants.LEFT));
+        panelMas3.add(new JLabel("Servicios", SwingConstants.CENTER));
         panelMas3.setBorder(BorderFactory.createTitledBorder(""));
         String servicios[] = {"Baño", "Corte", "Vacunas"};
         JCheckBox cbServicios[] = new JCheckBox[3];
@@ -189,7 +190,7 @@ public class Ventana extends JFrame {
             Producto[i].setForeground(Color.BLACK);
         }
 
-        panelMas4.add(new JLabel("Extras"), BorderLayout.NORTH);
+        panelMas4.add(new JLabel("Extras",SwingConstants.CENTER));
         panelMas4.setBorder(BorderFactory.createTitledBorder(""));
 
         String extras[] = {"Shampoo Especial", "Corte de Uñas", "Collar Antipulgas"};
@@ -236,7 +237,7 @@ public class Ventana extends JFrame {
         JLabel etiquetas[] = {Mascota, Tipo, Servicio, Extras, Costo};
         for(int i=0;i<etiquetas.length;i++){
             etiquetas[i].setFont(txtTitulo);
-            etiquetas[i].setHorizontalAlignment(SwingConstants.CENTER);
+            etiquetas[i].setHorizontalAlignment(SwingConstants.LEFT);
             etiquetas[i].setForeground(Color.BLACK);
         }
 
