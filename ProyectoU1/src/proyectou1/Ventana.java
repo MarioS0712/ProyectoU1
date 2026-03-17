@@ -15,7 +15,7 @@ import javax.swing.table.TableModel;
 public class Ventana extends JFrame {
 
     private JPanel panelNorte, panelOeste, panelCentro, panelEste, panelSur;
-    private JPanel panelOeste2, panelCentro2, panelEste2, panelSur2;
+    private JPanel panelOeste2, panelCentro2, panelEste2, panelSur2, subPanel1, subPanel2;
     private JTextField txtNombre;
     private JRadioButton rbPerro, rbGato, rbAve;
     private JCheckBox cbBaño, cbCorte, cbVacunas, cbShampoo, cbUñas, cbCollar;
@@ -27,17 +27,24 @@ public class Ventana extends JFrame {
         new ImageIcon(getClass().getResource(mascotasImg[2])),
         new ImageIcon(getClass().getResource(mascotasImg[3]))
     };
-    private JList listaServicios;
-    String registro = "";
-    String opcionRadio = "";
-    String opcionCBox = "";
+
+    private String productosImg[] = {"shampoo.jpg"};
+    private Icon products[] = {
+        new ImageIcon(getClass().getResource(productosImg[0])),};
     JTable servicios = new JTable();
 
     DefaultTableModel modelo = new DefaultTableModel();
     private Object[] o = new Object[5];
 
-    private String datos[] = new String[100];
+    private final String nombreProductos[] = {
+        "Shampoo", "Correa", "Sueter", "Collar Personalizado", "Hueso"
+    };
+
+    private JComboBox listaProductos;
+    private JLabel inventario, nom, proveedor, importado;
+    private int cShampoo = 5, cCorrea = 7, cSueter = 4, cCollar = 10, cHueso = 15;
     private int contador = 0;
+    private Font textosTipo = new Font("Arial", Font.BOLD, 10);
     private Font txtTitulo = new Font("Segoe UI", Font.BOLD, 14);
     private Font txtEncabezados = new Font("Segoe UI", Font.BOLD, 16);
     private Font txtTextos = new Font("Segoe UI", Font.BOLD, 12);
@@ -58,7 +65,6 @@ public class Ventana extends JFrame {
         Color fondo = new Color(255, 204, 0);
         panelNorte.setBackground(fondo);
         panelNorte.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Sistema", TitledBorder.CENTER, TitledBorder.TOP));
-
         JLabel titulo = Diseño.encabezado("Servicio para Mascotas y PetShop MANAGER");
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         JButton btnPest1 = new JButton("Servicios");
@@ -97,6 +103,7 @@ public class Ventana extends JFrame {
                 panelSur.setVisible(false);
                 panelCentro.setVisible(false);
                 initCentro2();
+
             }
         });
 
@@ -115,16 +122,16 @@ public class Ventana extends JFrame {
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelMas1.setBorder(new EmptyBorder(5,5,5,5));
+        panelMas1.setBorder(new EmptyBorder(30, 30, 30, 30));
         JPanel panelMas2 = new JPanel();
         panelMas2.setLayout(new BoxLayout(panelMas2, BoxLayout.Y_AXIS));
-        panelMas2.setBorder(new EmptyBorder(2,2,2,2));
+        panelMas2.setBorder(new EmptyBorder(10, 10, 10, 10));
         panelMas2.setBackground(Color.ORANGE);
         JPanel panelMas3 = new JPanel(new GridLayout(4, 1));
-        panelMas3.setBorder(new EmptyBorder(2,2,2,2));
+        panelMas3.setBorder(new EmptyBorder(10, 10, 10, 10));
         panelMas3.setBackground(Color.ORANGE);
         JPanel panelMas4 = new JPanel(new GridLayout(4, 1));
-        panelMas4.setBorder(new EmptyBorder(2,2,2,2));
+        panelMas4.setBorder(new EmptyBorder(10, 10, 10, 10));
         panelMas4.setBackground(Color.ORANGE);
 
         panelMas1.setBorder(BorderFactory.createTitledBorder(""));
@@ -133,36 +140,35 @@ public class Ventana extends JFrame {
         gbc.gridy = 1;
         panelMas1.add(txtNombre, gbc);
 
-        panelMas2.add(new JLabel("Tipo de Mascota", SwingConstants.CENTER));
-        panelMas2.setBorder(BorderFactory.createTitledBorder(""));
+        panelOeste.add(panelMas1);
 
+        panelMas2.add(new JLabel("Tipo de Mascota:", SwingConstants.CENTER), BorderLayout.NORTH);
+        panelMas2.add(Box.createVerticalStrut(13));
+        panelMas2.setBorder(BorderFactory.createTitledBorder(""));
         String tiposMascota[] = {"Perro", "Gato", "Ave"};
         JRadioButton rbMascotas[] = new JRadioButton[3];
         ButtonGroup grupo = new ButtonGroup();
 
         for (int i = 0; i < tiposMascota.length; i++) {
             rbMascotas[i] = new JRadioButton(tiposMascota[i] + " $5");
-
             rbMascotas[i].setBackground(Color.ORANGE);
             rbMascotas[i].setOpaque(true);
             rbMascotas[i].setFocusPainted(false);
             rbMascotas[i].setBorderPainted(false);
-            rbMascotas[i].setMargin(new Insets(0,0,0,0));
+            rbMascotas[i].setMargin(new Insets(0, 0, 0, 0));
             rbMascotas[i].setAlignmentX(Component.LEFT_ALIGNMENT);
             rbMascotas[i].setHorizontalAlignment(SwingConstants.LEFT);
-
             grupo.add(rbMascotas[i]);
-            panelMas2.add(Box.createVerticalStrut(12));
             panelMas2.add(rbMascotas[i]);
+            panelMas2.add(Box.createVerticalStrut(5));
         }
-
         rbPerro = rbMascotas[0];
         rbGato = rbMascotas[1];
         rbAve = rbMascotas[2];
         rbPerro.setSelected(true);
         JRadioButton Masc[] = {rbPerro, rbGato, rbAve};
         //Tipo de letra
-        for(int i=0;i<Masc.length;i++){
+        for (int i = 0; i < Masc.length; i++) {
             Masc[i].setFont(txtTextos);
             Masc[i].setHorizontalAlignment(SwingConstants.LEFT);
             Masc[i].setForeground(Color.BLACK);
@@ -183,14 +189,13 @@ public class Ventana extends JFrame {
         cbCorte = cbServicios[1];
         cbVacunas = cbServicios[2];
         //Tipo de letras
-        JCheckBox Producto[] = {cbBaño, cbCorte,cbVacunas};
-        for(int i=0;i<Producto.length;i++){
+        JCheckBox Producto[] = {cbBaño, cbCorte, cbVacunas};
+        for (int i = 0; i < Producto.length; i++) {
             Producto[i].setFont(txtTextos);
             Producto[i].setHorizontalAlignment(SwingConstants.LEFT);
             Producto[i].setForeground(Color.BLACK);
         }
-
-        panelMas4.add(new JLabel("Extras",SwingConstants.CENTER));
+        panelMas4.add(new JLabel("Extras", SwingConstants.CENTER), BorderLayout.NORTH);
         panelMas4.setBorder(BorderFactory.createTitledBorder(""));
 
         String extras[] = {"Shampoo Especial", "Corte de Uñas", "Collar Antipulgas"};
@@ -198,7 +203,6 @@ public class Ventana extends JFrame {
 
         for (int i = 0; i < extras.length; i++) {
             cbExtras[i] = new JCheckBox(extras[i] + " $10");
-            cbExtras[i].setBackground(Color.ORANGE);
             cbExtras[i].setFocusPainted(false);
             cbExtras[i].setAlignmentX(Component.LEFT_ALIGNMENT);
             cbExtras[i].setHorizontalAlignment(SwingConstants.LEFT);
@@ -208,13 +212,12 @@ public class Ventana extends JFrame {
         cbUñas = cbExtras[1];
         cbCollar = cbExtras[2];
         //Tipo de letras
-        JCheckBox etiquetas[] = {cbShampoo, cbUñas,cbCollar};
-        for(int i=0;i<etiquetas.length;i++){
+        JCheckBox etiquetas[] = {cbShampoo, cbUñas, cbCollar};
+        for (int i = 0; i < etiquetas.length; i++) {
             etiquetas[i].setFont(txtTextos);
             etiquetas[i].setHorizontalAlignment(SwingConstants.LEFT);
             etiquetas[i].setForeground(Color.BLACK);
         }
-
         panelOeste.add(panelMas1);
         panelOeste.add(panelMas2);
         panelOeste.add(panelMas3);
@@ -226,7 +229,6 @@ public class Ventana extends JFrame {
         panelCentro = new JPanel(new GridLayout(6, 1));
         panelCentro.setBackground(Color.ORANGE);
         panelCentro.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Servicio Actual", TitledBorder.CENTER, TitledBorder.TOP));
-
         Mascota = new JLabel("Mascota: ");
         Tipo = new JLabel("Tipo: ");
         Servicio = new JLabel("Servicios: ");
@@ -235,7 +237,7 @@ public class Ventana extends JFrame {
         mascotaImg = new JLabel(icons[0]);
         //Tipo de letras
         JLabel etiquetas[] = {Mascota, Tipo, Servicio, Extras, Costo};
-        for(int i=0;i<etiquetas.length;i++){
+        for (int i = 0; i < etiquetas.length; i++) {
             etiquetas[i].setFont(txtTitulo);
             etiquetas[i].setHorizontalAlignment(SwingConstants.LEFT);
             etiquetas[i].setForeground(Color.BLACK);
@@ -248,16 +250,6 @@ public class Ventana extends JFrame {
         panelCentro.add(Costo);
         panelCentro.add(mascotaImg);
         add(panelCentro, BorderLayout.CENTER);
-    }
-
-    private void initCentro2() {
-        panelCentro2 = new JPanel(new GridLayout(5, 1));
-        panelCentro2.setBackground(Color.ORANGE);
-        panelCentro2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Funciones Proximas", TitledBorder.CENTER, TitledBorder.TOP));
-
-        JLabel Mensaje = new JLabel("Pestaña 2 ", SwingConstants.CENTER);
-        panelCentro2.add(Mensaje, BorderLayout.CENTER);
-        add(panelCentro2, BorderLayout.CENTER);
     }
 
     private void initEste() {
@@ -292,70 +284,116 @@ public class Ventana extends JFrame {
         JButton btnSalir = new JButton("Salir");
         JButton btnAtender = new JButton("Atender Mascota");
         JButton btnFinSer = new JButton("Finalizar servicio");
+        JButton btnInfo = new JButton("Info.D");
 
-        btnAñadir.setPreferredSize(new Dimension(150,35));
-        btnAtender.setPreferredSize(new Dimension(150,35));
-        btnFinSer.setPreferredSize(new Dimension(150,35));
-        btnSalir.setPreferredSize(new Dimension(100,35));
-
+        btnAñadir.setPreferredSize(new Dimension(150, 35));
+        btnAtender.setPreferredSize(new Dimension(150, 35));
+        btnFinSer.setPreferredSize(new Dimension(150, 35));
+        btnInfo.setPreferredSize(new Dimension(150, 35));
+        btnSalir.setPreferredSize(new Dimension(100, 35));
         panelSur.add(btnAñadir);
         panelSur.add(btnAtender);
         panelSur.add(btnFinSer);
+        panelSur.add(btnInfo);
         panelSur.add(btnSalir);
 
-        btnGuardar.addActionListener(new ActionListener() {
+        //Comando para funcionar como btnGuardar CTRL+S
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
+        Action guardarAction = new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                String nombre = "";
+                int precio = 0;
                 if (txtNombre.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, ingrese el nombre de la Mascota");
                     txtNombre.requestFocus();
                     return;
                 } else {
-                    nombre = txtNombre.getText();
+                    o[0] = txtNombre.getText();
                 }
 
-                String tipo = "";
                 if (rbPerro.isSelected()) {
-                    tipo = "Perro";
-                    mascotaImg.setIcon(icons[1]);
+                    o[1] = "Perro ";
+                    precio += 5;
                 }
+
                 if (rbGato.isSelected()) {
-                    tipo = "Gato";
-                    mascotaImg.setIcon(icons[2]);
+                    o[1] = "Gato ";
+                    precio += 5;
                 }
+
                 if (rbAve.isSelected()) {
-                    tipo = "Ave";
-                    mascotaImg.setIcon(icons[3]);
+                    o[1] = "Ave ";
+                    precio += 5;
                 }
+                if (!cbBaño.isSelected() && !cbCorte.isSelected() && !cbVacunas.isSelected()) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un servicio minimo para agregar");
+                    return;
+                } else {
+                    if (cbBaño.isSelected()) {
+                        o[2] = "Baño ";
+                        precio += 5;
+                    }
 
-                String servicios = "";
-                if (cbBaño.isSelected()) {
-                    servicios += "Baño ";
-                }
-                if (cbCorte.isSelected()) {
-                    servicios += "Corte ";
-                }
-                if (cbVacunas.isSelected()) {
-                    servicios += "Vacunas ";
-                }
+                    if (cbCorte.isSelected()) {
+                        o[2] = "Corte ";
+                        precio += 5;
+                    }
 
-                String extras = "";
+                    if (cbVacunas.isSelected()) {
+                        o[2] = "Vacunas ";
+                        precio += 5;
+                    }
+                    if (cbBaño.isSelected() & cbCorte.isSelected()) {
+                        o[2] = "Baño, Corte";
+                    }
+
+                    if (cbBaño.isSelected() & cbVacunas.isSelected()) {
+                        o[2] = "Baño, Vacunas";
+                    }
+
+                    if (cbCorte.isSelected() & cbVacunas.isSelected()) {
+                        o[2] = "Corte, Vacunas";
+                    }
+                    if (cbBaño.isSelected() & cbCorte.isSelected() & cbVacunas.isSelected()) {
+                        o[2] = "Baño, Corte, Vacunas";
+                    }
+                }
                 if (cbShampoo.isSelected()) {
-                    extras += "Shampoo ";
-                }
-                if (cbUñas.isSelected()) {
-                    extras += "Corte de Uñas ";
-                }
-                if (cbCollar.isSelected()) {
-                    extras += "Collar Antipulgas ";
+                    o[3] = "Shampoo ";
+                    precio += 10;
                 }
 
-                Mascota.setText("Mascota: " + nombre);
-                Tipo.setText("Tipo: " + tipo);
-                Servicio.setText("Servicios: " + servicios);
-                Extras.setText("Extras: " + extras);
+                if (cbUñas.isSelected()) {
+                    o[3] = "Corte de Uñas ";
+                    precio += 10;
+                }
+
+                if (cbCollar.isSelected()) {
+                    o[3] = "Collar Antipulgas ";
+                    precio += 10;
+                }
+                if (cbShampoo.isSelected() & cbUñas.isSelected()) {
+                    o[3] = "Shampoo, Uñas";
+                }
+
+                if (cbShampoo.isSelected() & cbCollar.isSelected()) {
+                    o[3] = "Shampoo, Collar";
+                }
+
+                if (cbUñas.isSelected() & cbCollar.isSelected()) {
+                    o[3] = "Uñas, Collar";
+                }
+                if (cbShampoo.isSelected() & cbUñas.isSelected() & cbCollar.isSelected()) {
+                    o[3] = "Shampoo, Uñas, Collar";
+                }
+                o[4] = Integer.toString(precio);
+                precio = 0;
+                modelo.addRow(o);
+                txtNombre.setText("");
             }
-        });
+        };
+        panelSur.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "Guardar");
+        panelSur.getActionMap().put("Guardar", guardarAction);
 
         btnAñadir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -382,36 +420,39 @@ public class Ventana extends JFrame {
                     o[1] = "Ave ";
                     precio += 5;
                 }
+                if (!cbBaño.isSelected() && !cbCorte.isSelected() && !cbVacunas.isSelected()) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un servicio minimo para agregar");
+                    return;
+                } else {
+                    if (cbBaño.isSelected()) {
+                        o[2] = "Baño ";
+                        precio += 5;
+                    }
 
-                if (cbBaño.isSelected()) {
-                    o[2] = "Baño ";
-                    precio += 5;
-                }
+                    if (cbCorte.isSelected()) {
+                        o[2] = "Corte ";
+                        precio += 5;
+                    }
 
-                if (cbCorte.isSelected()) {
-                    o[2] = "Corte ";
-                    precio += 5;
-                }
+                    if (cbVacunas.isSelected()) {
+                        o[2] = "Vacunas ";
+                        precio += 5;
+                    }
+                    if (cbBaño.isSelected() & cbCorte.isSelected()) {
+                        o[2] = "Baño, Corte";
+                    }
 
-                if (cbVacunas.isSelected()) {
-                    o[2] = "Vacunas ";
-                    precio += 5;
-                }
-                if (cbBaño.isSelected() & cbCorte.isSelected()) {
-                    o[2] = "Baño, Corte";
-                }
+                    if (cbBaño.isSelected() & cbVacunas.isSelected()) {
+                        o[2] = "Baño, Vacunas";
+                    }
 
-                if (cbBaño.isSelected() & cbVacunas.isSelected()) {
-                    o[2] = "Baño, Vacunas";
+                    if (cbCorte.isSelected() & cbVacunas.isSelected()) {
+                        o[2] = "Corte, Vacunas";
+                    }
+                    if (cbBaño.isSelected() & cbCorte.isSelected() & cbVacunas.isSelected()) {
+                        o[2] = "Baño, Corte, Vacunas";
+                    }
                 }
-
-                if (cbCorte.isSelected() & cbVacunas.isSelected()) {
-                    o[2] = "Corte, Vacunas";
-                }
-                if (cbBaño.isSelected() & cbCorte.isSelected() & cbVacunas.isSelected()) {
-                    o[2] = "Baño, Corte, Vacunas";
-                }
-
                 if (cbShampoo.isSelected()) {
                     o[3] = "Shampoo ";
                     precio += 10;
@@ -452,6 +493,48 @@ public class Ventana extends JFrame {
             }
         });
 
+        //Comando de bntAtender CRTL+A
+        KeyStroke keyStroke2 = KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK);
+        Action guardarAction2 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (Tipo.getText().equals("Tipo: ")) {
+                    int filas = servicios.getRowCount();
+                    if (filas > 0) {
+
+                        String dato1 = String.valueOf(servicios.getValueAt(0, 0));
+                        String dato2 = String.valueOf(servicios.getValueAt(0, 1));
+                        String dato3 = String.valueOf(servicios.getValueAt(0, 2));
+                        String dato4 = String.valueOf(servicios.getValueAt(0, 3));
+                        String dato5 = String.valueOf(servicios.getValueAt(0, 4));
+
+                        Mascota.setText("Mascota: " + dato1);
+                        Tipo.setText("Tipo: " + dato2);
+                        Servicio.setText("Servicios: " + dato3);
+                        Extras.setText("Extras: " + dato4);
+                        Costo.setText("Precio: $" + dato5);
+                        if (dato2.equals("Perro ")) {
+                            mascotaImg.setIcon(icons[1]);
+                        }
+                        if (dato2.equals("Gato ")) {
+                            mascotaImg.setIcon(icons[2]);
+                        }
+                        if (dato2.equals("Ave ")) {
+                            mascotaImg.setIcon(icons[3]);
+                        }
+                        modelo.removeRow(0);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hay ningún animal en espera");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ya hay una mascota en servicio");
+                }
+            }
+
+        };
+        panelSur.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke2, "Atender");
+        panelSur.getActionMap().put("Atender", guardarAction2);
+        //btnAtender
         btnAtender.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -491,6 +574,26 @@ public class Ventana extends JFrame {
 
         });
 
+        //Comando de bntFinSer CRTL+F
+        KeyStroke keyStroke3 = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
+        Action guardarAction3 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (Tipo.getText().equals("Tipo: ")) {
+                    JOptionPane.showMessageDialog(null, "No hay mascotas en el servicio");
+                } else {
+                    Mascota.setText("Mascota: ");
+                    Tipo.setText("Tipo: ");
+                    Servicio.setText("Servicios: ");
+                    Extras.setText("Extras: ");
+                    Costo.setText("Precio: ");
+                    mascotaImg.setIcon(icons[0]);
+                }
+            }
+        };
+        panelSur.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke3, "FinServicio");
+        panelSur.getActionMap().put("FinServicio", guardarAction3);
+
         btnFinSer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -501,13 +604,89 @@ public class Ventana extends JFrame {
                     Tipo.setText("Tipo: ");
                     Servicio.setText("Servicios: ");
                     Extras.setText("Extras: ");
-                    Costo.setText("Costo: ");
+                    Costo.setText("Precio: ");
                     mascotaImg.setIcon(icons[0]);
                 }
             }
 
         });
+
+        btnInfo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarInfo();
+            }
+
+        });
         add(panelSur, BorderLayout.SOUTH);
 
+    }
+
+    private void mostrarInfo() {
+        Ventana2 ventana2 = new Ventana2();
+        ventana2.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        ventana2.setSize(600, 350);
+        ventana2.setResizable(false);
+        ventana2.setLocationRelativeTo(null);
+        ventana2.setVisible(true);
+    }
+
+    //Segunda Pestaña
+    private void initCentro2() {
+        panelCentro2 = new JPanel(new GridLayout(1, 1));
+        panelCentro2.setBackground(Color.ORANGE);
+        panelCentro2.setBorder(BorderFactory.createTitledBorder("Funciones Proximas"));
+
+        JLabel Mensaje = new JLabel("", SwingConstants.CENTER);
+        Mensaje.setIcon(products[0]);
+        panelCentro2.add(Mensaje, BorderLayout.CENTER);
+        add(panelCentro2, BorderLayout.CENTER);
+    }
+
+    private void initEste2() {
+        panelEste2 = new JPanel(new GridLayout(2, 1));
+        panelEste2.setBorder(BorderFactory.createTitledBorder("Lista de Servicios en espera"));
+        panelEste2.setPreferredSize(new Dimension(450, 0));
+        subPanel1 = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new java.awt.Insets(5, 5, 5, 5);
+        subPanel2 = new JPanel(new GridLayout(4, 1));
+
+        listaProductos = new JComboBox(nombreProductos);
+        listaProductos.setMaximumRowCount(5);
+
+        subPanel1.add(listaProductos, gbc);
+
+        inventario = new JLabel("Cantidad en inventario: " + cShampoo);
+        nom = new JLabel("Nombre del Producto: Shampoo Campeón");
+        proveedor = new JLabel("Proveedor: SCI Products");
+        importado = new JLabel("Importado: SI");
+
+        subPanel2.add(inventario);
+        subPanel2.add(nom);
+        subPanel2.add(proveedor);
+        subPanel2.add(importado);
+        panelEste2.add(subPanel1, SwingConstants.CENTER);
+        panelEste2.add(subPanel2);
+        add(panelEste2, BorderLayout.EAST);
+
+    }
+
+    private void initSur2() {
+        panelSur2 = new JPanel(new FlowLayout());
+        panelSur2.setBackground(Color.ORANGE);
+        panelSur2.setBorder(BorderFactory.createTitledBorder("Opciones"));
+
+        JButton btnAgregar = new JButton("Agregar 1 a Inventario");
+        JButton btnQuitar = new JButton("Quitar 1 a Inventario");
+        JButton btnSalir = new JButton("Salir");
+
+        panelSur2.add(btnAgregar);
+        panelSur2.add(btnQuitar);
+        panelSur2.add(btnSalir);
+
+        add(panelSur2, BorderLayout.SOUTH);
     }
 }
