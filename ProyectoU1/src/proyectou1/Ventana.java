@@ -633,15 +633,185 @@ public class Ventana extends JFrame {
 
     //Segunda Pestaña
     private void initCentro2() {
-        panelCentro2 = new JPanel(new GridLayout(1, 1));
-        panelCentro2.setBackground(Color.ORANGE);
-        panelCentro2.setBorder(BorderFactory.createTitledBorder("Funciones Proximas"));
-
-        JLabel Mensaje = new JLabel("", SwingConstants.CENTER);
-        Mensaje.setIcon(products[0]);
-        panelCentro2.add(Mensaje, BorderLayout.CENTER);
-        add(panelCentro2, BorderLayout.CENTER);
+       if (panelCentro2 != null) {
+        remove(panelCentro2); 
     }
+
+    panelCentro2 = new JPanel(new BorderLayout(10,10)); 
+
+    DefaultTableModel modeloTienda = new DefaultTableModel();
+    modeloTienda.addColumn("Producto");
+    modeloTienda.addColumn("Stock");
+    modeloTienda.addColumn("Precio");
+    modeloTienda.addColumn("Categoria");
+
+    modeloTienda.addRow(new Object[]{"Croquetas Premium para perro", 20, "$800","Alimento"});
+    modeloTienda.addRow(new Object[]{"Croquetas Normales para perro", 20, "$300","Alimento"});
+    modeloTienda.addRow(new Object[]{"Croquetas Economicas para perro", 20, "$100","Alimento"});
+    modeloTienda.addRow(new Object[]{"Semillas para ave", 20, "$300","Alimento"});
+    modeloTienda.addRow(new Object[]{"Comida Humeda para gato", 20, "$100","Alimento"});
+    modeloTienda.addRow(new Object[]{"Churu", 20, "$20","Alimento"});
+    modeloTienda.addRow(new Object[]{"Juguete para gato", 15, "$40","Accesorios"});
+    modeloTienda.addRow(new Object[]{"Juguete para perro", 15, "$50","Accesorios"});
+    modeloTienda.addRow(new Object[]{"kit de baño", 10, "$220","Higiene"});
+    modeloTienda.addRow(new Object[]{"Collar antipulgas", 25, "$10","Higiene"});
+    modeloTienda.addRow(new Object[]{"Perfume para pelaje", 10, "$90","Higiene"});
+    modeloTienda.addRow(new Object[]{"Toallas humedas para mascotas", 5, "$150","Higiene"});
+    modeloTienda.addRow(new Object[]{"Rascador para gato", 5, "$150","Accesorios"});
+    modeloTienda.addRow(new Object[]{"Cortauñas", 5, "$35","Higiene"});
+
+    JTable tablaTienda = new JTable(modeloTienda);
+    tablaTienda.setFont(new Font("Arial", Font.PLAIN, 12));
+    tablaTienda.setRowHeight(20); 
+    tablaTienda.setDefaultEditor(Object.class, null); 
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloTienda);
+    tablaTienda.setRowSorter(sorter);
+
+    JScrollPane scrollInventario = new JScrollPane(tablaTienda);
+    scrollInventario.setPreferredSize(new Dimension(700, 250));
+
+    String[] categorias = {"Todos", "Alimento", "Accesorios", "Higiene"};
+    JComboBox<String> comboCategorias = new JComboBox<>(categorias);
+    comboCategorias.setFont(new Font("Arial", Font.PLAIN, 12));
+    comboCategorias.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String seleccion = (String) comboCategorias.getSelectedItem();
+            if (seleccion.equals("Todos")) {
+                sorter.setRowFilter(null);
+            } else {
+                sorter.setRowFilter(RowFilter.regexFilter(seleccion, 3));
+            }
+        }
+    });
+
+    JPanel panelFiltro = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    panelFiltro.add(new JLabel("Filtrar por categoría:"));
+    panelFiltro.add(comboCategorias);
+
+    DefaultTableModel modeloCarrito = new DefaultTableModel();
+    modeloCarrito.addColumn("Producto");
+    modeloCarrito.addColumn("Cantidad");
+    modeloCarrito.addColumn("Subtotal");
+
+    JTable tablaCarrito = new JTable(modeloCarrito);
+    tablaCarrito.setFont(new Font("Arial", Font.PLAIN, 12));
+    tablaCarrito.setRowHeight(20);
+    JScrollPane scrollCarrito = new JScrollPane(tablaCarrito);
+    scrollCarrito.setPreferredSize(new Dimension(700, 200));
+
+    JLabel etiquetaTotal = new JLabel("Total: $0");
+    etiquetaTotal.setFont(new Font("Arial", Font.BOLD, 16));
+    etiquetaTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+
+    JButton botonCobrar = new JButton("Cobrar");
+    botonCobrar.setFont(new Font("Arial", Font.BOLD, 14));
+    botonCobrar.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(null, "Cobro realizado\n" + etiquetaTotal.getText());
+            modeloCarrito.setRowCount(0);
+            etiquetaTotal.setText("Total: $0");
+        }
+    });
+
+    JPanel panelCobro = new JPanel(new BorderLayout());
+    panelCobro.add(etiquetaTotal, BorderLayout.CENTER);
+    panelCobro.add(botonCobrar, BorderLayout.EAST);
+
+    JPanel panelCarrito = new JPanel(new BorderLayout(10,10));
+    panelCarrito.setBackground(Color.ORANGE);
+    panelCarrito.setBorder(BorderFactory.createTitledBorder(
+        BorderFactory.createLineBorder(Color.BLACK, 2),
+        "Carrito de Compras",
+        TitledBorder.CENTER,
+        TitledBorder.TOP,
+        new Font("Arial", Font.BOLD, 16),
+        Color.BLACK));
+    panelCarrito.add(scrollCarrito, BorderLayout.CENTER);
+    panelCarrito.add(panelCobro, BorderLayout.SOUTH);
+
+    JButton botonAgregar = new JButton("Agregar al carrito");
+    botonAgregar.setFont(new Font("Arial", Font.BOLD, 14));
+    JButton botonSalirTienda = new JButton("Salir");
+    botonSalirTienda.setFont(new Font("Arial", Font.BOLD, 14));
+    botonSalirTienda.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.exit(0);
+        }
+    });
+
+    botonAgregar.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int fila = tablaTienda.getSelectedRow();
+            if (fila != -1) {
+                String producto = (String) tablaTienda.getValueAt(fila, 0);
+                String precioStr = (String) tablaTienda.getValueAt(fila, 2);
+                double precio = Double.parseDouble(precioStr.replace("$", ""));
+                int stock = (int) tablaTienda.getValueAt(fila, 1);
+
+                if (stock > 0) {
+                    tablaTienda.setValueAt(stock - 1, fila, 1);
+
+                    boolean encontrado = false;
+                    for (int i = 0; i < modeloCarrito.getRowCount(); i++) {
+                        String prodExistente = (String) modeloCarrito.getValueAt(i, 0);
+                        if (prodExistente.equals(producto)) {
+                            int cantidad = (int) modeloCarrito.getValueAt(i, 1);
+                            cantidad++;
+                            modeloCarrito.setValueAt(cantidad, i, 1);
+                            modeloCarrito.setValueAt("$" + (cantidad * precio), i, 2);
+                            encontrado = true;
+                            break;
+                        }
+                    }
+
+                    if (!encontrado) {
+                        modeloCarrito.addRow(new Object[]{producto, 1, "$" + precio});
+                    }
+
+                    double total = 0;
+                    for (int i = 0; i < modeloCarrito.getRowCount(); i++) {
+                        String subtotalStr = (String) modeloCarrito.getValueAt(i, 2);
+                        total += Double.parseDouble(subtotalStr.replace("$", ""));
+                    }
+                    etiquetaTotal.setText("Total: $" + total);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "No hay stock de " + producto);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Selecciona un producto primero");
+            }
+        }
+    });
+
+    JPanel panelBotonesTienda = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
+    panelBotonesTienda.add(botonAgregar);
+    panelBotonesTienda.add(botonSalirTienda);
+
+    JPanel panelInventario = new JPanel(new BorderLayout(10,10));
+    panelInventario.setBorder(BorderFactory.createTitledBorder(
+        BorderFactory.createLineBorder(Color.BLACK, 2),
+        "Inventario",
+        TitledBorder.CENTER,
+        TitledBorder.TOP,
+        new Font("Arial", Font.BOLD, 16),
+        Color.BLACK));
+    panelInventario.add(panelFiltro, BorderLayout.NORTH);
+    panelInventario.add(scrollInventario, BorderLayout.CENTER);
+    panelInventario.add(panelBotonesTienda, BorderLayout.SOUTH);
+
+    panelCentro2.add(panelInventario, BorderLayout.NORTH);
+    panelCentro2.add(panelCarrito, BorderLayout.CENTER);
+
+    add(panelCentro2, BorderLayout.CENTER);
+    revalidate();
+}
+ 
+
 
     private void initEste2() {
         panelEste2 = new JPanel(new GridLayout(2, 1));
