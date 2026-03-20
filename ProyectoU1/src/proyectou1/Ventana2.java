@@ -70,11 +70,11 @@ public class Ventana2 extends JFrame {
         add(panelEste, BorderLayout.EAST);
 
         JPanel panelSur = new JPanel(new FlowLayout());
-        btnAnt = new JButton("←");
+        JButton btnAnt = Diseño.boton1("←");
         btnAnt.setFont(fuente);
-        btnSig = new JButton("→");
+        JButton btnSig = Diseño.boton1("→");
         btnSig.setFont(fuente);
-        btnSalir = new JButton("Cerrar");
+        JButton btnSalir = Diseño.boton("Cerrar");
         btnSalir.setFont(fuente2);
         panelSur.add(btnAnt);
         panelSur.add(btnSig);

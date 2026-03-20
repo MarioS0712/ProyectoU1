@@ -1,10 +1,20 @@
 package proyectou1;
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Diseño extends JPanel {
 
     private int radio;
+    private Color color1, color2;
+
+    public Diseño(Color c1, Color c2, int radio){
+        this.color1 = c1;
+        this.color2 = c2;
+        this.radio = radio;
+        setOpaque(false);
+    }
 
     public Diseño(int radio){
         this.radio = radio;
@@ -16,48 +26,73 @@ public class Diseño extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+        if(color1 != null && color2 != null){
+            GradientPaint gp = new GradientPaint(
+                    0, 0, color1,
+                    getWidth(), getHeight(), color2
+            );
+            g2.setPaint(gp);
+        } else {
+            g2.setColor(getBackground());
+        }
 
-        int ancho = getWidth();
-        int alto = getHeight();
-
-        // sombra suave (no mueve el panel)
-        g2.setColor(new Color(0,0,0,30));
-        g2.fillRoundRect(3,3,ancho-3,alto-3,radio,radio);
-
-        // degradado
-        float[] posiciones = {0.0f, 0.3f, 1.0f};
-
-        Color[] colores = {
-                new Color(255,177,51),   // #ffb133
-                new Color(255,186,77),   // #ffba4d
-                new Color(255,196,102)   // #ffc466
-        };
-
-        LinearGradientPaint degradado = new LinearGradientPaint(
-                0,0,
-                ancho,alto,
-                posiciones,
-                colores
-        );
-
-        g2.setPaint(degradado);
-
-        // panel principal
-        g2.fillRoundRect(0,0,ancho,alto,radio,radio);
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), radio, radio);
     }
 
-    // encabezado bonito
     public static JLabel encabezado(String texto){
+        JLabel lbl = new JLabel(texto, SwingConstants.CENTER);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lbl.setForeground(new Color(40,40,40));
+        return lbl;
+    }
+    public static JButton boton(String texto){
+        JButton btn = new JButton(texto);
+        btn.setFocusPainted(false);
+        btn.setBackground(new Color(255,177,51));
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btn.setBorder(new EmptyBorder(8,15,8,15));
 
-        JLabel titulo = new JLabel(texto, SwingConstants.CENTER);
+        btn.addMouseListener(new MouseAdapter(){
+            public void mouseEntered(MouseEvent e){
+                btn.setBackground(new Color(255,140,0));
+            }
+            public void mouseExited(MouseEvent e){
+                btn.setBackground(new Color(255,177,51));
+            }
+        });
+        return btn;
+    }
+    public static JButton boton1(String texto){
+        JButton btn = new JButton(texto);
+        btn.setFocusPainted(false);
+        btn.setBackground(new Color(135, 206, 235));
+        btn.setForeground(Color.BLACK);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btn.setBorder(new EmptyBorder(8,15,8,15));
 
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        titulo.setForeground(Color.WHITE);
+        btn.addMouseListener(new MouseAdapter(){
+            public void mouseEntered(MouseEvent e){
+                btn.setBackground(new Color(100, 180, 220));
+            }
+            public void mouseExited(MouseEvent e){
+                btn.setBackground(new Color(135, 206, 235));
+            }
+        });
 
-        return titulo;
+        return btn;
     }
 
+
+    public static TitledBorder borde(String titulo){
+        return BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.BLACK),
+                titulo,
+                TitledBorder.CENTER,
+                TitledBorder.TOP,
+                new Font("Segoe UI", Font.BOLD, 14)
+        );
+    }
 }
