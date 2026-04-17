@@ -655,7 +655,7 @@ public class Ventana extends JFrame {
     modeloTienda.addColumn("Stock");
     modeloTienda.addColumn("Precio");
     modeloTienda.addColumn("Categoria");
-
+    
     modeloTienda.addRow(new Object[]{"Croquetas Premium para perro", 20, "$800","Alimento"});
     modeloTienda.addRow(new Object[]{"Croquetas Normales para perro", 20, "$300","Alimento"});
     modeloTienda.addRow(new Object[]{"Croquetas Economicas para perro", 20, "$100","Alimento"});
@@ -670,7 +670,7 @@ public class Ventana extends JFrame {
     modeloTienda.addRow(new Object[]{"Toallas humedas para mascotas", 5, "$150","Higiene"});
     modeloTienda.addRow(new Object[]{"Rascador para gato", 5, "$150","Accesorios"});
     modeloTienda.addRow(new Object[]{"Cortauñas", 5, "$35","Higiene"});
-
+    
         JTable tablaTienda = new JTable(modeloTienda);
         tablaTienda.setFont(txtTextos);
         tablaTienda.setRowHeight(25);
@@ -681,13 +681,59 @@ public class Ventana extends JFrame {
     tablaTienda.setForeground(Color.BLACK);
     tablaTienda.setGridColor(Color.DARK_GRAY);
     tablaTienda.setSelectionBackground(new Color(255,140,0));
+    
+    String productosImg[] = {
+        "premium.png", "normal.png", "economicas.png", "semillas.png",
+        "gatocomida.png", "churu.png", "juguetegato.png", "jugueteperro.png",
+        "kitbaño.png", "collar.png", "perfume.png", "toallahumeda.png",
+        "rascador.png", "cortauñas.png"
+};
+
+    Icon productosIcons[] = {
+        new ImageIcon(getClass().getResource(productosImg[0])),
+        new ImageIcon(getClass().getResource(productosImg[1])),
+        new ImageIcon(getClass().getResource(productosImg[2])),
+        new ImageIcon(getClass().getResource(productosImg[3])),
+        new ImageIcon(getClass().getResource(productosImg[4])),
+        new ImageIcon(getClass().getResource(productosImg[5])),
+        new ImageIcon(getClass().getResource(productosImg[6])),
+        new ImageIcon(getClass().getResource(productosImg[7])),
+        new ImageIcon(getClass().getResource(productosImg[8])),
+        new ImageIcon(getClass().getResource(productosImg[9])),
+        new ImageIcon(getClass().getResource(productosImg[10])),
+        new ImageIcon(getClass().getResource(productosImg[11])),
+        new ImageIcon(getClass().getResource(productosImg[12])),
+        new ImageIcon(getClass().getResource(productosImg[13]))
+};
+
+    JLabel productoImg = new JLabel();
+        productoImg.setHorizontalAlignment(SwingConstants.CENTER);
+        productoImg.setPreferredSize(new Dimension(200, 200));
+
+    tablaTienda.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int fila = tablaTienda.getSelectedRow();
+            if (fila != -1 && fila < productosIcons.length) {
+            productoImg.setIcon(productosIcons[fila]);
+        }
+    }
+});
 
     JScrollPane scrollInventario = new JScrollPane(tablaTienda);
     scrollInventario.setPreferredSize(new Dimension(700, 250));
     scrollInventario.getViewport().setBackground(new Color(255,177,51));
     scrollInventario.setBackground(new Color(255,177,51));
     scrollInventario.setBorder(null);
+    
+    JPanel panelImagen = new JPanel(new BorderLayout());
+    panelImagen.add(productoImg, BorderLayout.CENTER);
 
+    panelCentro2.add(scrollInventario, BorderLayout.CENTER);
+    panelCentro2.add(panelImagen, BorderLayout.EAST);
+    
+    panelCentro2.add(scrollInventario, BorderLayout.CENTER);
+    
     String[] categorias = {"Todos", "Alimento", "Accesorios", "Higiene"};
     JComboBox<String> comboCategorias = new JComboBox<>(categorias);
     comboCategorias.setFont(txtTextos);
@@ -767,6 +813,7 @@ public class Ventana extends JFrame {
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
         }
+        
     });
 
     botonAgregar.addActionListener(new ActionListener() {
@@ -839,9 +886,9 @@ public class Ventana extends JFrame {
 
     add(panelCentro2, BorderLayout.CENTER);
     revalidate();
+
 }
  
-
 
     private void initEste2() {
         panelEste2 = new JPanel(new GridLayout(2, 1));
